@@ -4,10 +4,14 @@ import './index.css';
 import App from './App';
 import Category from './Category'
 import * as serviceWorker from './serviceWorker';
+import Home from './Home'
+import Navigation from './Navigation'
+import 'bootstrap/dist/css/bootstrap.css'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Category />
+    <Navigation/>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
