@@ -18,7 +18,6 @@ class Category extends Component {
 
     render() {
         const { isLoading, Categories} = this.state;
-
         if(isLoading) {
             return(
                 <div>
@@ -27,7 +26,7 @@ class Category extends Component {
             );
         }
             return (
-                
+
                 <div>
                     <h1>Categories</h1>
                     {

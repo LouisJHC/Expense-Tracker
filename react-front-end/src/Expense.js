@@ -6,11 +6,38 @@ import "react-datepicker/dist/react-datepicker.css";
 
 class Expense extends Component {
     state = { 
-        date: new Date()
+        date: new Date(),
+        isLoading: true,
+        Categories: [],
+        Expenses: []
+    }
+
+
+    async componentDidMount() {
+        let categoriesResponse = await fetch('/api/categories');
+        let categoriesBody = await categoriesResponse.json();
+        this.setState({
+            isLoading: false,
+            Categories: categoriesBody
+        })
+
+
+        let expenseResponse = await fetch('/api/expenses');
+        let expenseBody = await expenseResponse.json()
+
+        this.setState({
+            Expenses: expenseBody
+        })
     }
     render() {
-
+        const { isLoading, Categories } = this.state;
         let title = <h2>Expense Page</h2>
+
+        if(isLoading) {
+            return (
+            <div>Loading...</div>
+            );
+        } 
         return(
             <Container>
                 {title}
@@ -23,8 +50,17 @@ class Expense extends Component {
 
                     <FormGroup>
                         <label for="category">Categories</label>{" "}
-                        <input type="text" name="category" placeholder="Category" onChange={this.handleChange}></input>
+                        <select>
+                            {
+                                Categories.map(category => 
+                                    <option id={category.id}>
+                                        {category.category}
+                                    </option>
+                                )
+                            }
+                        </select>
                     </FormGroup>
+
 
                     <FormGroup>
                         <label for="date">Date</label>{" "}
@@ -44,7 +80,7 @@ class Expense extends Component {
                     </FormGroup>
                 </Form>
             </Container>
-        );
+        );   
     }
 }
 

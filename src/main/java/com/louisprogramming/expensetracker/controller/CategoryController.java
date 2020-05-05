@@ -33,7 +33,7 @@ public class CategoryController {
     public ResponseEntity<?> getCategory(@PathVariable int id) {
         // why Optional here? because .findById(id) might return nothing.
        Optional<Category> category = categoryRepository.findById(id);
-       System.out.println(category);
+
        // if found, show a Status: 200 OK and its json body in Postman. If not, set the Status: 204 No Content
        return category.map(res -> ResponseEntity.ok().body(res)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
