@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 class Category extends Component {
     state = {
         isLoading: true,
@@ -29,7 +28,7 @@ class Category extends Component {
         }
             return (
                 
-                <div> 
+                <div>
                     <h1>Categories</h1>
                     {
                         Categories.map(category => 
@@ -40,8 +39,6 @@ class Category extends Component {
                     }
 
                 </div>   
-
-
             );
         }
     

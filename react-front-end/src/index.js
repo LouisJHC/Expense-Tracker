@@ -10,8 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Navigation/>
-    <App />
+    <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
