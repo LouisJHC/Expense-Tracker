@@ -18,7 +18,7 @@ public class Category {
     private int id;
 
     @NonNull
-    private String category;
+    private String categoryName;
 
 //    @ManyToOne(cascade= CascadeType.PERSIST)
 //    private User user;

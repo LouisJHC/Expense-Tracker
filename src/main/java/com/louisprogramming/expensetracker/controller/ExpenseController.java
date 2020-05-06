@@ -29,7 +29,7 @@ public class ExpenseController {
     @RequestMapping(value="/expense/{id}", method=RequestMethod.GET)
     public ResponseEntity<?> getExpense(@PathVariable int id) {
         Optional<Expense> result = expenseRepository.findById(id);
-        return result.map(res -> ResponseEntity.ok().body(res)).orElseGet(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return result.map(res -> ResponseEntity.ok().body(res)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @RequestMapping(value="/expense", method=RequestMethod.POST)
