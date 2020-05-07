@@ -1,16 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.css'
 import './index.css';
 import App from './App';
-import Category from './Category'
 import * as serviceWorker from './serviceWorker';
-import Home from './Home'
-import Navigation from './Navigation'
-import 'bootstrap/dist/css/bootstrap.css'
+import { MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles'
 
+
+const theme = createMuiTheme({
+    typography: {
+        fontFamily: "Railway"
+    }
+})
 ReactDOM.render(
   <React.StrictMode>
-    <App/>
+    <MuiThemeProvider theme={theme}>
+      <App/>
+    </MuiThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

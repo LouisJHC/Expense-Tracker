@@ -1,10 +1,17 @@
 import React, { Component } from 'react'
-import Navigation from './Navigation'
 
 class Home extends Component {
+    styling = {
+        alignItems: 'center',
+        display: 'flex',
+        height: '50vh',
+        justifyContent: 'center'
+    }
     render() {
         return(
-            <h2>Home</h2>
+            <h2 style={this.styling}>
+                Home
+            </h2>
         );
     }
 }

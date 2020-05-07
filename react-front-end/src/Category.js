@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Container, Form, FormGroup, Table } from 'reactstrap';
 class Category extends Component {
     state = {
         isLoading: true,
@@ -26,20 +27,27 @@ class Category extends Component {
             );
         }
             return (
+                <Container>
+                    <Table striped>
+                    <thead>
+                        <tr>
+                            <th width>Categories</th>
+                        </tr>
 
-                <div>
-                    <h1>Categories</h1>
-                    {
-                        Categories.map(category => 
-                            <div id={category.id}>
-                                {category.categoryName}
-                            </div>
-                        )
-                    }
-
-                </div>   
-            );
-        }
+                    </thead>
+                    <tbody>
+                        {
+                            Categories.map(category => 
+                                <tr key={category.id}>
+                                    <th>{category.categoryName}</th>
+                                </tr>
+                            )
+                        }
+                    </tbody>
+                    </Table>
+                </Container>
+        );
+    }
     
 }
 

@@ -1,9 +1,45 @@
-import React, { Component } from "react";
-import { Container, Form, FormGroup, Button, Table } from "reactstrap";
-import { Link } from "react-router-dom";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { Component } from 'react';
+import { Container, Form, FormGroup, Button, Table } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Moment from 'react-moment';
+import { withStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+
+const styles = theme => ({
+    editButton: {
+        background: 'linear-gradient(50deg, #c4b20e 40%, #ff8e53 75%)',
+        border: 0,
+        borderRadius: 5,
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 40,
+        padding: '0 15px'
+    },
+
+    submitButton: {
+        background: 'linear-gradient(50deg, #6bb7fe 40%,  #598e94 75%)',
+        border: 0,
+        borderRadius: 5,
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 40,
+        padding: '0 15px'
+    },
+
+    cancelButton: {
+        background: 'linear-gradient(50deg, #598e94 40%, #ff8e53 75%)',
+        border: 0,
+        borderRadius: 5,
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 40,
+        padding: '0 15px'
+    }
+
+})
 class Expense extends Component {
 
     constructor(props) {
@@ -14,7 +50,6 @@ class Expense extends Component {
             Categories: [],
             Expenses: [],
             items: {
-                id: 100,
                 description: '',
                 expenseDate: new Date(),
                 location: '',
@@ -41,33 +76,10 @@ class Expense extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(items)
-        }).then(console.log("Submitted"));
-
-        event.preventDefault();
+        }).then(response => response.json()).then(data => console.log(data));
         
-
+        // event.preventDefault();
         // this.props.history.push("/expenses")
-    }
-    
-    
-
-
-    async componentDidMount() {
-        let categoriesResponse = await fetch('/api/categories');
-        let categoriesBody = await categoriesResponse.json();
-        this.setState({
-            isLoading: false,
-            Categories: categoriesBody
-        })
-
-
-        let expenseResponse = await fetch('/api/expenses');
-        let expenseBody = await expenseResponse.json()
-
-        this.setState({
-            isLoading: false,
-            Expenses: expenseBody
-        })
     }
 
     async remove(id) {
@@ -85,6 +97,46 @@ class Expense extends Component {
                 Expenses: updatedExpenses
             })
         )
+    }
+
+    async update(id) {
+        let items = {...this.state.items};
+        // since id is undefined in the state, setting items["id"] = id will edit the existing value, instead of creating a new id.
+        items["id"] = id;
+        await fetch('/api/expense/' + id, 
+        {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(items)
+        })
+        
+        window.location.reload()
+    }
+
+    async componentDidMount() {
+        this.getCategories();
+        this.getExpenses();
+    }
+
+    async getCategories() {
+        let categoriesResponse = await fetch('/api/categories');
+        let categoriesBody = await categoriesResponse.json();
+        this.setState({
+            isLoading: false,
+            Categories: categoriesBody
+        })
+    }
+
+    async getExpenses() {
+        let expenseResponse = await fetch('/api/expenses');
+        let expenseBody = await expenseResponse.json()
+
+        this.setState({
+            isLoading: false,
+            Expenses: expenseBody
+        })
     }
 
     handleChange(event) {
@@ -114,40 +166,31 @@ class Expense extends Component {
         let value = event.target.value;
 
         
-        if(value == 'Travel') {
+        if(value === 'Travel') {
             items['category']['id'] = 1;
-        } else if (value == 'Auto Loan') {
+        } else if (value === 'Auto Loan') {
             items['category']['id'] = 2;
         } else {
             items['category']['id'] = 3;
         }
-        // instead of updating category.categoryName directly, I can just update the category.id and it will update the category value since it is the primary key.
-        //items["category"]["categoryName"] = event.target.value;
 
-        console.log(items)
+        // instead of updating category.categoryName like below, directly, I can just update the category.id and it will update the category value
+        // since it is the primary key.
+        // items["category"]["categoryName"] = event.target.value;
 
         this.setState({
             items
         });
-
-    
-
-
-
-
-        // items.category.name = event.target.value;
-        // let name = event.target.name;
-        // items[name] = event.target.value;
-        // console.log(items)
-        // this.setState({
-        //     items
-        // })
     }
 
     render() {
+        const { classes } = this.props; 
         const { isLoading, Categories, Expenses } = this.state;
         let title = <h2>Expense Page</h2>
 
+        if(isLoading) {
+            return(<h3>Loading...</h3>)
+        }
         return(
             <Container>
                 {title}
@@ -182,21 +225,22 @@ class Expense extends Component {
                     </FormGroup>
 
                     <FormGroup>
-                        <Button color="primary" type="submit">Submit</Button>{" "}
+                        <Button className={classes.submitButton} type="submit">Submit</Button>{" "}
                         <Link to="/home">
-                            <Button color="success">Cancel</Button>
+                            <Button className={classes.cancelButton}>Cancel</Button>
                         </Link>
                     </FormGroup>
                 </Form>
 
-                <Table>
+                <Table striped>
                     <thead>
                         <tr>
-                            <th width="30%">Description</th>
-                            <th width="10%">Date</th>
-                            <th width="10%">Location</th>
-                            <th width="20%">Category</th>
-                            <th width="20%">Delete</th>
+                            <th width>Description</th>
+                            <th width>Date</th>
+                            <th width>Location</th>
+                            <th width>Category</th>
+                            <th width>Edit</th>
+                            <th width>Delete</th>
                         </tr>
 
                     </thead>
@@ -208,7 +252,11 @@ class Expense extends Component {
                                     <th><Moment format="YYYY/MM/DD" date={expense.expenseDate}/></th>
                                     <th>{expense.location}</th>
                                     <th>{expense.category.categoryName}</th>
-                                    <Button color="danger" onClick={() => this.remove(expense.id)}>Remove</Button>
+                                    <th><Button scope="row" className = {classes.editButton} color="info" onClick={() => this.update(expense.id)}>Edit</Button></th>
+                                    <th><IconButton aria-label="delete" onClick={() => this.remove(expense.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </th>
                                 </tr>
                             )
                         }
@@ -222,4 +270,4 @@ class Expense extends Component {
     }
 }
 
-export default Expense;
+export default withStyles(styles) (Expense);
