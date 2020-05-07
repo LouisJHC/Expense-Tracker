@@ -17,7 +17,7 @@ class Category extends Component {
 
 
     render() {
-        const { isLoading, Categories} = this.state;
+        const { isLoading, Categories } = this.state;
         if(isLoading) {
             return(
                 <div>
@@ -32,7 +32,7 @@ class Category extends Component {
                     {
                         Categories.map(category => 
                             <div id={category.id}>
-                                {category.category}
+                                {category.categoryName}
                             </div>
                         )
                     }

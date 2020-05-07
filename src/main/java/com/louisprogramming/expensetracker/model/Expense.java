@@ -1,14 +1,12 @@
 package com.louisprogramming.expensetracker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.Instant;
 
 @NoArgsConstructor
@@ -18,7 +16,8 @@ import java.time.Instant;
 @Table(name="expense")
 public class Expense {
 
-    @Id
+    // to use MySQL AUTO_INCREMENT so whenever the user adds the new expense, it can be added with a new primary key.
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
 
     @NonNull
